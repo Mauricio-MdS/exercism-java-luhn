@@ -6,6 +6,7 @@ class LuhnValidator {
     boolean isValid(String candidate) {
         candidate = candidate.replace(" ", "");
         if (candidate.length() < 2) return false;
+        if (invalidCharacters(candidate)) return false;
 
         final var reversedString = new StringBuilder(candidate).reverse().toString();
         return calculateLuhnChecksum(reversedString) % 10 == 0;
@@ -21,6 +22,10 @@ class LuhnValidator {
         return IntStream.range(0, reversedString.length())
                 .map(getDoubledOrOriginalDigit)
                 .sum();
+    }
+
+    private boolean invalidCharacters(String candidate) {
+        return candidate.chars().anyMatch(c -> !Character.isDigit((char) c));
     }
 
 }
